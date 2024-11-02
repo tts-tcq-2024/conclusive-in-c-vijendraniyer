@@ -1,72 +1,88 @@
 #include "typewise-alert.h"
-#include <stdio.h>
+#include <iostream>
+#include <stdexcept>
 
-BreachType inferBreach(double value, double lowerLimit, double upperLimit) {
-    if (value < lowerLimit) {
-        return TOO_LOW;
-    }
-    if (value > upperLimit) {
-        return TOO_HIGH;
-    }
-    return NORMAL;
+// Define limits for different cooling types
+double getPassiveCoolingLowerLimit() {
+    return 0; // Passive cooling lower limit
 }
 
-// Helper function to get cooling limits
-int getCoolingLimits(CoolingType coolingType, bool isUpperLimit) {
-    if (isUpperLimit) {
-        switch (coolingType) {
-            case PASSIVE_COOLING: return 35; // upper limit
-            case HI_ACTIVE_COOLING: return 45; // upper limit
-            case MED_ACTIVE_COOLING: return 40; // upper limit
-        }
-    } else {
-        switch (coolingType) {
-            case PASSIVE_COOLING: return 0; // lower limit
-            case HI_ACTIVE_COOLING: return 0; // lower limit
-            case MED_ACTIVE_COOLING: return 0; // lower limit
-        }
-    }
-    return -1; // Error case, should not occur
+double getPassiveCoolingUpperLimit() {
+    return 35; // Passive cooling upper limit
 }
 
-int getLowerLimit(CoolingType coolingType) {
-    return getCoolingLimits(coolingType, false);
+double getHiActiveCoolingLowerLimit() {
+    return 0; // High active cooling lower limit
 }
 
-int getUpperLimit(CoolingType coolingType) {
-    return getCoolingLimits(coolingType, true);
+double getHiActiveCoolingUpperLimit() {
+    return 45; // High active cooling upper limit
 }
 
-BreachType classifyTemperatureBreach(CoolingType coolingType, double temperatureInC) {
-    int lowerLimit = getLowerLimit(coolingType);
-    int upperLimit = getUpperLimit(coolingType);
-    return inferBreach(temperatureInC, lowerLimit, upperLimit);
+double getMedActiveCoolingLowerLimit() {
+    return 0; // Medium active cooling lower limit
 }
 
-void checkAndAlert(AlertTarget alertTarget, BatteryCharacter batteryChar, double temperatureInC) {
-    BreachType breachType = classifyTemperatureBreach(batteryChar.coolingType, temperatureInC);
-    switch (alertTarget) {
-        case TO_CONTROLLER:
-            sendToController(breachType);
+double getMedActiveCoolingUpperLimit() {
+    return 40; // Medium active cooling upper limit
+}
+
+CoolingLimits getCoolingLimits(CoolingType coolingType) {
+    CoolingLimits limits;
+
+    switch (coolingType) {
+        case PASSIVE_COOLING:
+            limits.lowerLimit = getPassiveCoolingLowerLimit();
+            limits.upperLimit = getPassiveCoolingUpperLimit();
             break;
-        case TO_EMAIL:
-            sendToEmail(breachType);
+        case HI_ACTIVE_COOLING:
+            limits.lowerLimit = getHiActiveCoolingLowerLimit();
+            limits.upperLimit = getHiActiveCoolingUpperLimit();
             break;
+        case MED_ACTIVE_COOLING:
+            limits.lowerLimit = getMedActiveCoolingLowerLimit();
+            limits.upperLimit = getMedActiveCoolingUpperLimit();
+            break;
+        default:
+            throw std::invalid_argument("Invalid cooling type");
     }
+
+    return limits;
+}
+
+double classifyTemperatureBreach(CoolingType coolingType, double temperature) {
+    CoolingLimits limits = getCoolingLimits(coolingType);
+    if (temperature < limits.lowerLimit) {
+        return 1; // Too low
+    } else if (temperature > limits.upperLimit) {
+        return 2; // Too high
+    }
+    return 0; // Normal
 }
 
 void sendToController(BreachType breachType) {
-    const unsigned short header = 0xfeed;
-    printf("%x : %x\n", header, breachType);
+    // Implement the logic for sending alerts to the controller
+    if (breachType == TOO_LOW) {
+        std::cout << "Sending alert: Temperature too low!" << std::endl;
+    } else if (breachType == TOO_HIGH) {
+        std::cout << "Sending alert: Temperature too high!" << std::endl;
+    }
 }
 
 void sendToEmail(BreachType breachType) {
-    const char* recipient = "a.b@c.com";
+    // Implement the logic for sending alerts via email
     if (breachType == TOO_LOW) {
-        printf("To: %s\n", recipient);
-        printf("Hi, the temperature is too low\n");
+        std::cout << "Email alert: Temperature too low!" << std::endl;
     } else if (breachType == TOO_HIGH) {
-        printf("To: %s\n", recipient);
-        printf("Hi, the temperature is too high\n");
+        std::cout << "Email alert: Temperature too high!" << std::endl;
+    }
+}
+
+void checkAndAlert(AlertTarget alertTarget, BatteryCharacter batteryCharacter, double temperature) {
+    BreachType breachType = classifyTemperatureBreach(batteryCharacter.coolingType, temperature);
+    if (alertTarget == TO_CONTROLLER) {
+        sendToController(breachType);
+    } else if (alertTarget == TO_EMAIL) {
+        sendToEmail(breachType);
     }
 }
