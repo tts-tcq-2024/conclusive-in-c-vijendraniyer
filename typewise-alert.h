@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TYPEWISE_ALERT_H
+#define TYPEWISE_ALERT_H
 
 typedef enum {
     PASSIVE_COOLING,
@@ -6,14 +7,16 @@ typedef enum {
     MED_ACTIVE_COOLING
 } CoolingType;
 
+typedef struct {
+    double lowerLimit;
+    double upperLimit;
+} CoolingLimits;
+
 typedef enum {
-    NORMAL,
     TOO_LOW,
+    NORMAL,
     TOO_HIGH
 } BreachType;
-
-BreachType inferBreach(double value, double lowerLimit, double upperLimit);
-BreachType classifyTemperatureBreach(CoolingType coolingType, double temperatureInC);
 
 typedef enum {
     TO_CONTROLLER,
@@ -22,9 +25,19 @@ typedef enum {
 
 typedef struct {
     CoolingType coolingType;
-    char brand[48];
+    // Other battery characteristics can be added here
 } BatteryCharacter;
 
-void checkAndAlert(AlertTarget alertTarget, BatteryCharacter batteryChar, double temperatureInC);
+CoolingLimits getCoolingLimits(CoolingType coolingType);
+double getPassiveCoolingLowerLimit();
+double getPassiveCoolingUpperLimit();
+double getHiActiveCoolingLowerLimit();
+double getHiActiveCoolingUpperLimit();
+double getMedActiveCoolingLowerLimit();
+double getMedActiveCoolingUpperLimit();
+double classifyTemperatureBreach(CoolingType coolingType, double temperature);
 void sendToController(BreachType breachType);
 void sendToEmail(BreachType breachType);
+void checkAndAlert(AlertTarget alertTarget, BatteryCharacter batteryCharacter, double temperature);
+
+#endif // TYPEWISE_ALERT_H
