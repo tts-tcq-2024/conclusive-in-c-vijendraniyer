@@ -50,7 +50,7 @@ CoolingLimits getCoolingLimits(CoolingType coolingType) {
     return limits;
 }
 
-// Update this function to return BreachType
+// Updated function to return BreachType
 BreachType classifyTemperatureBreach(CoolingType coolingType, double temperature) {
     CoolingLimits limits = getCoolingLimits(coolingType);
     if (temperature < limits.lowerLimit) {
