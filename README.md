@@ -16,7 +16,7 @@ The [GitHub Actions](https://docs.github.com/en/actions) in this project impleme
 - No Duplications: Fails on finding duplication of 3 lines or more. There are no duplications, so this passes.
 - Limit complexity: The limit per function is set at 3 and it's currently failing.
 - Build and Run: Runs the tests. It's passing currently, but there are hardly any tests. You need to add more.
-- Enter Reflections: Replace the required text in the **Reflections** section below, within this file. This workflow fails until you replace it with your impressions.
+- Enter Reflections: Replace the required text "_.e.n.t.e.r" (was present here as well and workflow checks whole file, so modified it with . after every character) in the **Reflections** section below, within this file. This workflow fails until you replace it with your impressions.
 
 As with any legacy, have a look at the code to understand it better.
 
