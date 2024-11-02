@@ -31,6 +31,17 @@ int getUpperLimit(CoolingType coolingType) {
   }
 }
 
+// Helper function to print email message based on breach type
+void printEmailMessage(BreachType breachType) {
+  const char* recipient = "a.b@c.com";
+  printf("To: %s\n", recipient);
+  if (breachType == TOO_LOW) {
+    printf("Hi, the temperature is too low\n");
+  } else if (breachType == TOO_HIGH) {
+    printf("Hi, the temperature is too high\n");
+  }
+}
+
 BreachType classifyTemperatureBreach(CoolingType coolingType, double temperatureInC) {
   int lowerLimit = getLowerLimit(coolingType);
   int upperLimit = getUpperLimit(coolingType);
@@ -56,17 +67,5 @@ void sendToController(BreachType breachType) {
 }
 
 void sendToEmail(BreachType breachType) {
-  const char* recipient = "a.b@c.com";
-  switch (breachType) {
-    case TOO_LOW:
-      printf("To: %s\n", recipient);
-      printf("Hi, the temperature is too low\n");
-      break;
-    case TOO_HIGH:
-      printf("To: %s\n", recipient);
-      printf("Hi, the temperature is too high\n");
-      break;
-    case NORMAL:
-      break;
-  }
+  printEmailMessage(breachType);
 }
