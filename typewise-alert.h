@@ -18,6 +18,7 @@ BreachType classifyTemperatureBreach(CoolingType coolingType, double temperature
 // Declarations for new helper functions
 int getLowerLimit(CoolingType coolingType);
 int getUpperLimit(CoolingType coolingType);
+void printEmailMessage(BreachType breachType);
 
 typedef enum {
   TO_CONTROLLER,
