@@ -1,35 +1,68 @@
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 #include "typewise-alert.h"
 
-TEST(TypeWiseAlertTestSuite, InfersBreachAccordingToLimits) {
-    EXPECT_EQ(inferBreach(0, 1, 10), TOO_LOW);
-    EXPECT_EQ(inferBreach(5, 1, 10), NORMAL);
-    EXPECT_EQ(inferBreach(11, 1, 10), TOO_HIGH);
+// Test cases for cooling limits
+TEST(CoolingLimitsTests, PassiveCoolingLimits) {
+    CoolingLimits limits = getCoolingLimits(PASSIVE_COOLING);
+    EXPECT_EQ(limits.lowerLimit, 0);
+    EXPECT_EQ(limits.upperLimit, 35);
 }
 
-TEST(TypeWiseAlertTestSuite, ClassifiesTemperatureBreach) {
-    BatteryCharacter batteryChar;
-
-    batteryChar.coolingType = PASSIVE_COOLING;
-    EXPECT_EQ(classifyTemperatureBreach(batteryChar.coolingType, -1), TOO_LOW);
-    EXPECT_EQ(classifyTemperatureBreach(batteryChar.coolingType, 20), NORMAL);
-    EXPECT_EQ(classifyTemperatureBreach(batteryChar.coolingType, 36), TOO_HIGH);
-
-    batteryChar.coolingType = HI_ACTIVE_COOLING;
-    EXPECT_EQ(classifyTemperatureBreach(batteryChar.coolingType, 46), TOO_HIGH);
-
-    batteryChar.coolingType = MED_ACTIVE_COOLING;
-    EXPECT_EQ(classifyTemperatureBreach(batteryChar.coolingType, 41), TOO_HIGH);
+TEST(CoolingLimitsTests, HiActiveCoolingLimits) {
+    CoolingLimits limits = getCoolingLimits(HI_ACTIVE_COOLING);
+    EXPECT_EQ(limits.lowerLimit, 0);
+    EXPECT_EQ(limits.upperLimit, 45);
 }
 
-TEST(TypeWiseAlertTestSuite, CheckAndAlertFunction) {
-    BatteryCharacter batteryChar;
-    batteryChar.coolingType = PASSIVE_COOLING;
-
-    // Test sending to controller
-    checkAndAlert(TO_CONTROLLER, batteryChar, 36); // Sends to controller
-
-    // Test sending to email
-    checkAndAlert(TO_EMAIL, batteryChar, -1); // Sends email alert for too low
-    checkAndAlert(TO_EMAIL, batteryChar, 36); // Sends email alert for too high
+TEST(CoolingLimitsTests, MedActiveCoolingLimits) {
+    CoolingLimits limits = getCoolingLimits(MED_ACTIVE_COOLING);
+    EXPECT_EQ(limits.lowerLimit, 0);
+    EXPECT_EQ(limits.upperLimit, 40);
 }
+
+// Example tests for classifyTemperatureBreach
+TEST(ClassifyTemperatureBreachTests, PassiveCooling) {
+    EXPECT_EQ(classifyTemperatureBreach(PASSIVE_COOLING, -1), 1); // Too low
+    EXPECT_EQ(classifyTemperatureBreach(PASSIVE_COOLING, 20), 0); // Normal
+    EXPECT_EQ(classifyTemperatureBreach(PASSIVE_COOLING, 36), 2); // Too high
+}
+
+TEST(ClassifyTemperatureBreachTests, HiActiveCooling) {
+    EXPECT_EQ(classifyTemperatureBreach(HI_ACTIVE_COOLING, -1), 1); // Too low
+    EXPECT_EQ(classifyTemperatureBreach(HI_ACTIVE_COOLING, 30), 0); // Normal
+    EXPECT_EQ(classifyTemperatureBreach(HI_ACTIVE_COOLING, 50), 2); // Too high
+}
+
+TEST(ClassifyTemperatureBreachTests, MedActiveCooling) {
+    EXPECT_EQ(classifyTemperatureBreach(MED_ACTIVE_COOLING, -1), 1); // Too low
+    EXPECT_EQ(classifyTemperatureBreach(MED_ACTIVE_COOLING, 35), 0); // Normal
+    EXPECT_EQ(classifyTemperatureBreach(MED_ACTIVE_COOLING, 45), 2); // Too high
+}
+
+// Tests for sending alerts
+TEST(SendAlertsTests, SendToController) {
+    testing::internal::CaptureStdout();
+    sendToController(TOO_LOW);
+    std::string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ(output, "Sending alert: Temperature too low!\n");
+
+    testing::internal::CaptureStdout();
+    sendToController(TOO_HIGH);
+    output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ(output, "Sending alert: Temperature too high!\n");
+}
+
+TEST(SendAlertsTests, SendToEmail) {
+    testing::internal::CaptureStdout();
+    sendToEmail(TOO_LOW);
+    std::string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ(output, "Email alert: Temperature too low!\n");
+
+    testing::internal::CaptureStdout();
+    sendToEmail(TOO_HIGH);
+    output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ(output, "Email alert: Temperature too high!\n");
+}
+
+// Other existing tests...
+
