@@ -1,15 +1,6 @@
 #include <gtest/gtest.h>
 #include "typewise-alert.h"
 
-// Mock functions for testing
-void sendToController(BreachType breachType) {
-    // Mock implementation
-}
-
-void sendToEmail(BreachType breachType) {
-    // Mock implementation
-}
-
 TEST(TypeWiseAlertTestSuite, InfersBreachAccordingToLimits) {
     EXPECT_EQ(inferBreach(0, 1, 10), TOO_LOW);
     EXPECT_EQ(inferBreach(5, 1, 10), NORMAL);
