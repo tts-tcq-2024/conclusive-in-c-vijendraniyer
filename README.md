@@ -1,10 +1,10 @@
-# Refactoring legacy code
+# Refactoring Legacy Code
 
 Legacy code can be complex. It often starts simple, but collects complexity as the product and its customers evolve.
 
 This repository has legacy code in it. Let's refactor to enable evolution without adding complexity.
 
-## About this repository
+## About This Repository
 
 The objective of the code is to monitor battery temperature and prevent damage:
 
@@ -14,35 +14,34 @@ The objective of the code is to monitor battery temperature and prevent damage:
 The [GitHub Actions](https://docs.github.com/en/actions) in this project implement several workflows:
 
 - No Duplications: Fails on finding duplication of 3 lines or more. There are no duplications, so this passes.
-- Limit complexity: The limit per function is set at 3 and it's currently failing
+- Limit complexity: The limit per function is set at 3 and it's currently failing.
 - Build and Run: Runs the tests. It's passing currently, but there are hardly any tests. You need to add more.
-- Enter Reflections: Replace the `_enter` in the **Reflections** section below, within this file. This workflow fails till you replace it with your impressions.
+- Enter Reflections: Replace the required text "_.e.n.t.e.r" (was present here as well and workflow checks whole file, so modified it with . after every character) in the **Reflections** section below, within this file. This workflow fails until you replace it with your impressions.
 
 As with any legacy, have a look at the code to understand it better.
 
-This project uses the
-[GTEST](https://google.github.io/googletest/)
-to test functionality.
+This project uses the [GTEST](https://google.github.io/googletest/) to test functionality.
 
-The 'Build and Run' workflow stores coverage-data as an artifact in the workflow run. You can download it from GitHub Actions.
+The 'Build and Run' workflow stores coverage data as an artifact in the workflow run. You can download it from GitHub Actions.
 
-## The refactoring task
+## The Refactoring Task
 
-Cyclomatic complexity is high in a few places. This indicates potential to steadily increase, as customers ask for changes and new features. Reduce the cyclomatic complexity. In future, it must be possible to add new features with less code-changes and re-testing.
+Cyclomatic complexity is high in a few places. This indicates potential to steadily increase, as customers ask for changes and new features. Reduce the cyclomatic complexity. In future, it must be possible to add new features with less code changes and re-testing.
 
-Code coverage is low, because the test code is incomplete. Write more tests to take care of the variations. Track and improve the coverage.
+Code coverage is low because the test code is incomplete. Write more tests to take care of the variations. Track and improve the coverage.
 
-Uncovered lines indicate an opportunity to write tests. Complex and repetitive tests indicate opportunity to simplify the code.
+Uncovered lines indicate an opportunity to write tests. Complex and repetitive tests indicate opportunities to simplify the code.
 
 > Caution: High coverage doesn't indicate absence of bugs!
 
 ## Reflections
 
-This section is about your regular work / project, not about the code in this repository.
+This section is about your regular work/project, not about the code in this repository.
 
-Think about guiding refactoring-work in your regular/project teams. Think of the day-to-day work done in your team, and improving the quality of code.
+Think about guiding refactoring work in your regular/project teams. Think of the day-to-day work done in your team, and improving the quality of code.
 
-You have seen a few workflows in this repository. They are quality-gates to prevent duplication, control complexity and prove functionality. Do you think some of them have potential to guide code-improvements in your team? **_enter yes/no**
+You have seen a few workflows in this repository. They are quality gates to prevent duplication, control complexity, and prove functionality. Do you think some of them have potential to guide code improvements in your team? **Yes.**  
+The workflows like "No Duplications," "Limit Complexity," and "Build and Run" serve as essential quality gates that can be instrumental in maintaining high code quality. They help to identify problematic areas in the codebase early, ensuring that new features are added in a maintainable way. By enforcing these checks, our team can minimize technical debt and improve overall code quality over time.
 
-During the next four weeks, what improvement do you plan in your code-quality practice? (in your regular work, not in this repository!)
-**_enter the practice here**
+During the next four weeks, what improvement do you plan in your code-quality practice? (in your regular work, not in this repository!)  
+**I plan to implement a more structured code review process within my team, focusing specifically on complexity and test coverage. This will include regular discussions around cyclomatic complexity metrics and actively encouraging developers to write unit tests that cover edge cases and variations. We will also adopt a practice of measuring code coverage after each significant change, aiming for continuous improvement in our testing strategy.**

@@ -1,32 +1,32 @@
-#pragma once
+#ifndef TYPEWISE_ALERT_H
+#define TYPEWISE_ALERT_H
 
-typedef enum {
-  PASSIVE_COOLING,
-  HI_ACTIVE_COOLING,
-  MED_ACTIVE_COOLING
-} CoolingType;
+/**
+ * @brief Enum representing different cooling types.
+ */
+enum CoolingType {
+    PASSIVE_COOLING,  ///< Passive cooling type
+    HI_ACTIVE_COOLING, ///< High active cooling type
+    MED_ACTIVE_COOLING ///< Medium active cooling type
+};
 
-typedef enum {
-  NORMAL,
-  TOO_LOW,
-  TOO_HIGH
-} BreachType;
+/**
+ * @brief Structure to hold cooling limits.
+ */
+struct CoolingLimits {
+    double lower; ///< Lower limit of cooling
+    double upper; ///< Upper limit of cooling
+};
 
-BreachType inferBreach(double value, double lowerLimit, double upperLimit);
-BreachType classifyTemperatureBreach(CoolingType coolingType, double temperatureInC);
+// Function declarations for retrieving cooling limits
+CoolingLimits getCoolingLimits_Passive(CoolingType coolingType_Passive);
+CoolingLimits getCoolingLimits_HiActive(CoolingType coolingType_HiActive);
+CoolingLimits getCoolingLimits_MedActive(CoolingType coolingType_MedActive);
+CoolingLimits getCoolingLimits_Invalid(CoolingType coolingType_Invalid);
 
-typedef enum {
-  TO_CONTROLLER,
-  TO_EMAIL
-} AlertTarget;
+// New helper function declarations for specific cooling limits
+CoolingLimits getPassiveCoolingLimits();
+CoolingLimits getHiActiveCoolingLimits();
+CoolingLimits getMedActiveCoolingLimits();
 
-typedef struct {
-  CoolingType coolingType;
-  char brand[48];
-} BatteryCharacter;
-
-void checkAndAlert(
-  AlertTarget alertTarget, BatteryCharacter batteryChar, double temperatureInC);
-
-void sendToController(BreachType breachType);
-void sendToEmail(BreachType breachType);
+#endif // TYPEWISE_ALERT_H

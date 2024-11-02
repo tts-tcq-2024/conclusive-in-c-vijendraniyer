@@ -1,71 +1,72 @@
 #include "typewise-alert.h"
-#include <stdio.h>
+#include <iostream>
+#include <stdexcept>
 
-BreachType inferBreach(double value, double lowerLimit, double upperLimit) {
-  if(value < lowerLimit) {
-    return TOO_LOW;
-  }
-  if(value > upperLimit) {
-    return TOO_HIGH;
-  }
-  return NORMAL;
+// Define limits for different cooling types
+
+/**
+ * @brief Retrieve the passive cooling limits.
+ * 
+ * @return CoolingLimits The cooling limits for passive cooling.
+ */
+CoolingLimits getPassiveCoolingLimits() {
+    return {0, 35}; // Passive cooling limits
 }
 
-BreachType classifyTemperatureBreach(
-    CoolingType coolingType, double temperatureInC) {
-  int lowerLimit = 0;
-  int upperLimit = 0;
-  switch(coolingType) {
-    case PASSIVE_COOLING:
-      lowerLimit = 0;
-      upperLimit = 35;
-      break;
-    case HI_ACTIVE_COOLING:
-      lowerLimit = 0;
-      upperLimit = 45;
-      break;
-    case MED_ACTIVE_COOLING:
-      lowerLimit = 0;
-      upperLimit = 40;
-      break;
-  }
-  return inferBreach(temperatureInC, lowerLimit, upperLimit);
+/**
+ * @brief Retrieve the high active cooling limits.
+ * 
+ * @return CoolingLimits The cooling limits for high active cooling.
+ */
+CoolingLimits getHiActiveCoolingLimits() {
+    return {0, 45}; // High active cooling limits
 }
 
-void checkAndAlert(
-    AlertTarget alertTarget, BatteryCharacter batteryChar, double temperatureInC) {
-
-  BreachType breachType = classifyTemperatureBreach(
-    batteryChar.coolingType, temperatureInC
-  );
-
-  switch(alertTarget) {
-    case TO_CONTROLLER:
-      sendToController(breachType);
-      break;
-    case TO_EMAIL:
-      sendToEmail(breachType);
-      break;
-  }
+/**
+ * @brief Retrieve the medium active cooling limits.
+ * 
+ * @return CoolingLimits The cooling limits for medium active cooling.
+ */
+CoolingLimits getMedActiveCoolingLimits() {
+    return {0, 40}; // Medium active cooling limits
 }
 
-void sendToController(BreachType breachType) {
-  const unsigned short header = 0xfeed;
-  printf("%x : %x\n", header, breachType);
+/**
+ * @brief Retrieve the cooling limits for passive cooling type.
+ * 
+ * @param coolingType_Passive The cooling type (expected to be PASSIVE_COOLING).
+ * @return CoolingLimits The cooling limits for passive cooling.
+ */
+CoolingLimits getCoolingLimits_Passive(CoolingType coolingType_Passive) {
+    return getPassiveCoolingLimits();
 }
 
-void sendToEmail(BreachType breachType) {
-  const char* recepient = "a.b@c.com";
-  switch(breachType) {
-    case TOO_LOW:
-      printf("To: %s\n", recepient);
-      printf("Hi, the temperature is too low\n");
-      break;
-    case TOO_HIGH:
-      printf("To: %s\n", recepient);
-      printf("Hi, the temperature is too high\n");
-      break;
-    case NORMAL:
-      break;
-  }
+/**
+ * @brief Retrieve the cooling limits for high active cooling type.
+ * 
+ * @param coolingType_HiActive The cooling type (expected to be HI_ACTIVE_COOLING).
+ * @return CoolingLimits The cooling limits for high active cooling.
+ */
+CoolingLimits getCoolingLimits_HiActive(CoolingType coolingType_HiActive) {
+    return getHiActiveCoolingLimits();
+}
+
+/**
+ * @brief Retrieve the cooling limits for medium active cooling type.
+ * 
+ * @param coolingType_MedActive The cooling type (expected to be MED_ACTIVE_COOLING).
+ * @return CoolingLimits The cooling limits for medium active cooling.
+ */
+CoolingLimits getCoolingLimits_MedActive(CoolingType coolingType_MedActive) {
+    return getMedActiveCoolingLimits();
+}
+
+/**
+ * @brief Retrieve cooling limits for an invalid cooling type.
+ * 
+ * @param coolingType_Invalid The cooling type (expected to be an invalid value).
+ * @throws std::invalid_argument if the cooling type is invalid.
+ */
+CoolingLimits getCoolingLimits_Invalid(CoolingType coolingType_Invalid) {
+    throw std::invalid_argument("Invalid cooling type");
 }
