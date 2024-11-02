@@ -50,14 +50,15 @@ CoolingLimits getCoolingLimits(CoolingType coolingType) {
     return limits;
 }
 
-double classifyTemperatureBreach(CoolingType coolingType, double temperature) {
+// Update this function to return BreachType
+BreachType classifyTemperatureBreach(CoolingType coolingType, double temperature) {
     CoolingLimits limits = getCoolingLimits(coolingType);
     if (temperature < limits.lowerLimit) {
-        return 1; // Too low
+        return TOO_LOW; // Too low
     } else if (temperature > limits.upperLimit) {
-        return 2; // Too high
+        return TOO_HIGH; // Too high
     }
-    return 0; // Normal
+    return NORMAL; // Normal
 }
 
 void sendToController(BreachType breachType) {
