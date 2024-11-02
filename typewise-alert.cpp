@@ -15,15 +15,18 @@ CoolingLimits getMedActiveCoolingLimits() {
     return {0, 40}; // Medium active cooling limits
 }
 
-CoolingLimits getCoolingLimits(CoolingType coolingType) {
-    switch (coolingType) {
-        case PASSIVE_COOLING:
-            return getPassiveCoolingLimits();
-        case HI_ACTIVE_COOLING:
-            return getHiActiveCoolingLimits();
-        case MED_ACTIVE_COOLING:
-            return getMedActiveCoolingLimits();
-        default:
-            throw std::invalid_argument("Invalid cooling type");
-    }
+CoolingLimits getCoolingLimits_Passive(CoolingType coolingType_Passive) {
+    return getPassiveCoolingLimits();
+}
+
+CoolingLimits getCoolingLimits_HiActive(CoolingType coolingType_HiActive) {
+    return getHiActiveCoolingLimits();
+}
+
+CoolingLimits getCoolingLimits_MedActive(CoolingType coolingType_MedActive) {
+    return getMedActiveCoolingLimits();
+}
+
+CoolingLimits getCoolingLimits_Invalid(CoolingType coolingType_Invalid) {
+    throw std::invalid_argument("Invalid cooling type");
 }

@@ -19,9 +19,18 @@ TEST(CoolingLimitsTest, GetMedActiveCoolingLimits) {
     EXPECT_EQ(limits.upper, 40);
 }
 
-TEST(CoolingLimitsTest, GetCoolingLimits) {
-    EXPECT_NO_THROW(getCoolingLimits(PASSIVE_COOLING));
-    EXPECT_NO_THROW(getCoolingLimits(HI_ACTIVE_COOLING));
-    EXPECT_NO_THROW(getCoolingLimits(MED_ACTIVE_COOLING));
-    EXPECT_THROW(getCoolingLimits(static_cast<CoolingType>(999)), std::invalid_argument);
+TEST(CoolingLimitsTest, GetCoolingLimits_Passive) {
+    EXPECT_NO_THROW(getCoolingLimits_Passive(PASSIVE_COOLING));
+}
+
+TEST(CoolingLimitsTest, GetCoolingLimits_HiActive) {
+    EXPECT_NO_THROW(getCoolingLimits_HiActive(HI_ACTIVE_COOLING));
+}
+
+TEST(CoolingLimitsTest, GetCoolingLimits_MedActive) {
+    EXPECT_NO_THROW(getCoolingLimits_MedActive(MED_ACTIVE_COOLING));
+}
+
+TEST(CoolingLimitsTest, GetCoolingLimits_Invalid) {
+    EXPECT_THROW(getCoolingLimits_Invalid(static_cast<CoolingType>(999)), std::invalid_argument);
 }
