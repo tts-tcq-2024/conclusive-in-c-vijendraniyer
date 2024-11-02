@@ -1,0 +1,8 @@
+Test Case ID,Test Case Name,Test Description,Input,Expected Output,Related Function
+TC1,GetPassiveCoolingLimits_Expected{0,35},Get passive cooling limits,None,{0, 35},getPassiveCoolingLimits()
+TC2,GetHiActiveCoolingLimits_Expected{0,45},Get high active cooling limits,None,{0, 45},getHiActiveCoolingLimits()
+TC3,GetMedActiveCoolingLimits_Expected{0,40},Get medium active cooling limits,None,{0, 40},getMedActiveCoolingLimits()
+TC4,CoolingLimits_Passive_NoException,Validate cooling limits for passive cooling type,PASSIVE_COOLING,No exception thrown,getCoolingLimits_Passive()
+TC5,CoolingLimits_HiActive_NoException,Validate cooling limits for high active cooling type,HI_ACTIVE_COOLING,No exception thrown,getCoolingLimits_HiActive()
+TC6,CoolingLimits_MedActive_NoException,Validate cooling limits for medium active cooling type,MED_ACTIVE_COOLING,No exception thrown,getCoolingLimits_MedActive()
+TC7,CoolingLimits_Invalid_Exception,Test invalid cooling type,static_cast<CoolingType>(999),std::invalid_argument exception thrown,getCoolingLimits_Invalid()
